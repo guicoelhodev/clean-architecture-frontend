@@ -1,3 +1,4 @@
+import { mockAuthentication } from "../../../domain/mocks/mockAuthentication";
 import { HttpClientSpy } from "../../mocks/mockHttpClient";
 import { RemoteAuthentication } from "./remoteAuthentication";
 import { faker } from '@faker-js/faker'
@@ -21,8 +22,20 @@ describe("RemoteAuthentication", () => {
   test("Should call HttpPostClient with correct URL", async () => {
     const url = faker.internet.url();
     const { httpClientSpy, sut } = makeSut(url);
-    await sut.auth();
+    await sut.auth(mockAuthentication());
 
     expect(httpClientSpy.url).toBe(url);
+  });
+
+  test("Should call HttpPostClient with correct body", async () => {
+    const { httpClientSpy, sut } = makeSut();
+
+    const authenticationParams = mockAuthentication();
+    await sut.auth(authenticationParams);
+
+    expect(httpClientSpy.body).toEqual({
+      email: authenticationParams.email,
+      password: authenticationParams.password,
+    })
   });
 });
