@@ -1,3 +1,7 @@
+export interface HttpPostParams {
+  url: string;
+  body?: any;
+}
 export interface HttpPostClient {
-  post(url: string): Promise<void>;
+  post(params: HttpPostParams): Promise<void>;
 }
